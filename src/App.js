@@ -1,6 +1,9 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {
+    fetchFormData
+} from './actions';
 import './App.css';
-import * as mock from './mock.js';
 import Form from './components/form/Form';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import AppBar from 'material-ui/AppBar';
@@ -8,19 +11,33 @@ import FlatButton from 'material-ui/FlatButton';
 
 
 class App extends Component {
-  render() {
-    const formData = mock.forms[0];
-    return (
-      <MuiThemeProvider>
-        <div className="App">
-          <AppBar title="Form Builder" iconElementRight={<FlatButton label="Save" />}/>
-          <div className='App-Contents'>
-            <Form {...formData} />
-          </div>
-        </div>
-      </MuiThemeProvider>
-    );
-  }
+
+    componentDidMount() {
+        this.props.dispatch(fetchFormData());
+    }
+
+    render() {
+        const {form} = this.props;
+        return (
+            <MuiThemeProvider>
+                <div className="App">
+                    <AppBar title="Form Builder" iconElementRight={<FlatButton label="Save"/>}/>
+                    <div className='App-Contents'>
+                        {form.sections &&
+                        <Form {...form} />
+                        }
+                    </div>
+                </div>
+            </MuiThemeProvider>
+        );
+    }
 }
 
-export default App;
+function mapStateToProps(state) {
+    return {
+        app: state.app,
+        form: state.form
+    }
+}
+
+export default connect(mapStateToProps)(App);

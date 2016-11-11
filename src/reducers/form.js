@@ -2,12 +2,14 @@ import {
     RECEIVE_FORM_DATA
 } from '../actions';
 
-const initialState = {};
+import { Map } from 'immutable'
+
+const initialState = Map({});
 
 const form = (state = initialState, action) => {
     switch (action.type) {
         case RECEIVE_FORM_DATA:
-            return Object.assign({}, state, action.data);
+            return action.data;
         default:
             return state
     }
